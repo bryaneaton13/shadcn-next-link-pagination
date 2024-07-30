@@ -6,6 +6,8 @@ You can use Nextjs server components to control the `page` and `pageSize` parame
 
 `https://example.com?page=1&pageSize=20`
 
+![See it](PaginationExample.gif)
+
 ## Getting Started with
 
 1. Copy the code located in [`pagination-with-links.tsx`](https://github.com/bryaneaton13/shadcn-next-link-pagination/blob/main/components/ui/pagination-with-links.tsx) and paste it into your project.
