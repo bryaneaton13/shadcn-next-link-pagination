@@ -12,8 +12,9 @@ import {
 } from "./pagination";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-export interface PaginationFullProps {
+export interface PaginationWithLinksProps {
   pageSizeSelectOptions?: {
     pageSizeSearchParam?: string;
     pageSizeOptions: number[];
@@ -21,11 +22,16 @@ export interface PaginationFullProps {
   totalCount: number;
   pageSize: number;
   page: number;
-  showCount?: boolean;
   pageSearchParam?: string;
 }
 
-export function PaginationFull({ pageSizeSelectOptions, pageSize, totalCount, page, showCount }: PaginationFullProps) {
+export function PaginationWithLinks({
+  pageSizeSelectOptions,
+  pageSize,
+  totalCount,
+  page,
+  pageSearchParam,
+}: PaginationWithLinksProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,7 +40,7 @@ export function PaginationFull({ pageSizeSelectOptions, pageSize, totalCount, pa
 
   const buildLink = useCallback(
     (newPage: number) => {
-      const key = pageSizeSelectOptions?.pageSizeSearchParam || "page";
+      const key = pageSearchParam || "page";
       if (!searchParams) return `${pathname}?${key}=${newPage}`;
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.set(key, String(newPage));
@@ -118,19 +124,18 @@ export function PaginationFull({ pageSizeSelectOptions, pageSize, totalCount, pa
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-5 w-full">
-      <div className="flex flex-col gap-4 flex-1">
-        {pageSizeSelectOptions && (
+    <div className="flex flex-col md:flex-row items-center gap-3 w-full">
+      {pageSizeSelectOptions && (
+        <div className="flex flex-col gap-4 flex-1">
           <SelectRowsPerPage
             options={pageSizeSelectOptions.pageSizeOptions}
             setPageSize={navToPageSize}
             pageSize={pageSize}
           />
-        )}
-        {showCount && <ShowingCount totalPerPage={pageSize} page={page} total={totalCount} />}
-      </div>
-      <Pagination className="justify-end">
-        <PaginationContent>
+        </div>
+      )}
+      <Pagination className={cn({ "justify-end": pageSizeSelectOptions })}>
+        <PaginationContent className="max-sm:gap-0">
           <PaginationItem>
             <PaginationPrevious
               href={buildLink(Math.max(page - 1, 1))}
@@ -151,22 +156,6 @@ export function PaginationFull({ pageSizeSelectOptions, pageSize, totalCount, pa
         </PaginationContent>
       </Pagination>
     </div>
-  );
-}
-
-function ShowingCount({ page, totalPerPage, total }: { total: number; page: number; totalPerPage: number }) {
-  const start = (page - 1) * totalPerPage + 1;
-  const end = Math.min(page * totalPerPage, total);
-  return (
-    <span className="text-sm text-gray-700 dark:text-gray-400">
-      Showing{" "}
-      {start === end || end === 0 ? (
-        <span className="font-bold">{`${end.toLocaleString()}`}</span>
-      ) : (
-        <span className="font-bold">{`${start.toLocaleString()}-${end.toLocaleString()}`}</span>
-      )}{" "}
-      of <span className="font-bold">{total.toLocaleString()}</span>
-    </span>
   );
 }
 

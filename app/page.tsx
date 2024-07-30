@@ -1,103 +1,159 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Item from "./_components/item";
+import Code from "./_components/code";
 
-export default function Home() {
+export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By <Image src="/vercel.svg" alt="Vercel Logo" className="dark:invert" width={100} height={24} priority />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
+    <div className="flex min-h-screen place-items-center justify-center bg-white p-4">
+      <div className="mx-auto max-w-4xl">
+        <div className="text-center mt-28 mb-20">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-4xl mb-4">Pagination with Nextjs Links</h1>
+          <h2 className="leading-loose">
+            Uses{" "}
+            <a
+              href="https://nextjs.org/docs/app/api-reference/components/link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Nextjs Link
+            </a>{" "}
+            component for pagination.
+            <br />
+            Applies search parameters for <pre className="inline">page</pre> and <pre className="inline">limit</pre> to
+            the current URL.
+            <br />
+            <Code code="https://example.com?page=1&limit=20" lang="html" />
+            <strong>Click around and watch the URL change!</strong>
           </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+          <div className="my-8">
+            <Item />
+          </div>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">Explore starter templates for Next.js.</p>
-        </a>
+          <div className="flex justify-center mb-4">
+            <Link href="https://github.com/bryaneaton13/shadcn-next-link-pagination" target="_blank">
+              <Button variant="secondary" className="border border-foreground hover:shadow-lg transition-all">
+                <GithubIcon className="mr-2" /> View on Github
+              </Button>
+            </Link>
+          </div>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <br />
+
+          <br />
+          <br />
+          <br />
+          <br />
+
+          <div className="flex flex-col gap-16 border border-foreground/20 rounded p-3 md:w-[70vw]">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Try it out</h2>
+
+              <Link href="/">
+                <Button variant="default">Reset all pagination</Button>
+              </Link>
+            </div>
+
+            <div>
+              <h4>With many pages</h4>
+              <Item totalCount={500} pageSize={5} />
+            </div>
+
+            <div>
+              <h4>With page size options</h4>
+              <Item
+                pageSizeSelectOptions={{
+                  pageSizeOptions: [10, 25, 50, 100],
+                }}
+              />
+            </div>
+
+            <div>
+              <h4>With 1 item</h4>
+              <Item
+                totalCount={1}
+                pageSizeSelectOptions={{
+                  pageSizeOptions: [10, 25, 50, 100],
+                }}
+              />
+            </div>
+          </div>
+
+          <br />
+          <br />
+          <br />
+
+          <br />
+
+          <h2 className="text-2xl font-bold mb-2">Simple Example</h2>
+
+          <div className="text-left mx-auto w-fit border border-foreground/20 p-3 rounded">
+            <Code
+              code={`<PaginationWithLinks
+  page={1}
+  pageSize={20}
+  totalCount={500}
+/>`}
+            />
+          </div>
+          <br />
+
+          <h2 className="text-2xl font-bold mb-2">Real Example</h2>
+
+          <div className="text-left mx-auto w-fit border border-foreground/20 p-3 rounded">
+            <Code
+              code={`export default async function Example({ searchParams }) {
+  const page = parseInt(searchParams.get("page") || "1");
+  const pageSize = parseInt(searchParams.get("pageSize") || "20");
+  
+  const [data, count] = await getDataWithCount();
+
+  return (
+    <div>
+      {/* Other code */}
+      <PaginationWithLinks
+        page={page}
+        pageSize={pageSize}
+        totalCount={count}
+      />
+    </div>
   );
 }
+`}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GithubIcon({ className }: { className?: string }) {
+  return (
+    <svg width={16} height={16} role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <title>GitHub</title>
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+    </svg>
+  );
+}
+
+/**
+ *
+ * Example code
+ *
+ */
+
+// export default async function Example() {
+//   const searchParams = useSearchParams();
+//   const page = parseInt(searchParams.get("page") || "1");
+//   const pageSize = parseInt(searchParams.get("pageSize") || "20");
+//   const [data, count] = await getDataWithCount();
+//   return (
+//     <div>
+//       {/* Other code */}
+//       <PaginationWithLinks page={page} pageSize={pageSize} totalCount={count} />
+//     </div>
+//   );
+// }
