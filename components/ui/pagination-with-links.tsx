@@ -146,7 +146,7 @@ export function PaginationWithLinks({
           />
         </div>
       )}
-      <Pagination className={cn({ "justify-end": pageSizeSelectOptions })}>
+      <Pagination className={cn({ "md:justify-end": pageSizeSelectOptions })}>
         <PaginationContent className="max-sm:gap-0">
           <PaginationItem>
             <PaginationPrevious

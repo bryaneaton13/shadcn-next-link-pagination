@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Item from "./_components/item";
 import Code from "./_components/code";
+import { Suspense } from "react";
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="flex min-h-screen place-items-center justify-center bg-white p-4">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto w-full md:w-4xl xl:w-6xl md:max-w-4xl xl:max-w-6xl">
         <div className="text-center mt-28 mb-20">
           <h1 className="text-2xl font-bold tracking-tight sm:text-4xl mb-4">Pagination with Nextjs Links</h1>
           <h2 className="leading-loose">
@@ -29,7 +30,9 @@ export default function Page() {
           </h2>
 
           <div className="my-8">
-            <Item />
+            <Suspense>
+              <Item />
+            </Suspense>
           </div>
 
           <div className="flex justify-center mb-4">
@@ -47,7 +50,7 @@ export default function Page() {
           <br />
           <br />
 
-          <div className="flex flex-col gap-16 border border-foreground/20 rounded p-3 md:w-[70vw]">
+          <div className="flex flex-col gap-16 border border-foreground/20 rounded p-3">
             <div>
               <h2 className="text-2xl font-bold mb-2">Try it out</h2>
 
@@ -56,29 +59,36 @@ export default function Page() {
               </Link>
             </div>
 
-            <div>
-              <h4>With many pages</h4>
-              <Item totalCount={500} pageSize={5} />
-            </div>
-
-            <div>
-              <h4>With page size options</h4>
+            <Suspense>
               <Item
+                title="With many pages"
+                totalCount={500} pageSize={5} />
+            </Suspense>
+
+            <Suspense>
+              <Item
+                title="With 1 item"
+                totalCount={1} />
+            </Suspense>
+
+            <Suspense>
+              <Item
+                title="With page size options"
                 pageSizeSelectOptions={{
                   pageSizeOptions: [10, 25, 50, 100],
                 }}
               />
-            </div>
+            </Suspense>
 
-            <div>
-              <h4>With 1 item</h4>
+            <Suspense>
               <Item
+                title="With 1 item"
                 totalCount={1}
                 pageSizeSelectOptions={{
                   pageSizeOptions: [10, 25, 50, 100],
                 }}
               />
-            </div>
+            </Suspense>
           </div>
 
           <br />
@@ -137,22 +147,3 @@ function GithubIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-
-/**
- *
- * Example code
- *
- */
-
-// export default async function Example() {
-//   const searchParams = useSearchParams();
-//   const page = parseInt(searchParams.get("page") || "1");
-//   const pageSize = parseInt(searchParams.get("pageSize") || "20");
-//   const [data, count] = await getDataWithCount();
-//   return (
-//     <div>
-//       {/* Other code */}
-//       <PaginationWithLinks page={page} pageSize={pageSize} totalCount={count} />
-//     </div>
-//   );
-// }
