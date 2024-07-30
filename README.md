@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Shadcn Nextjs Link Pagination
 
-## Getting Started
+Use shadcn pagination components to create links that will dynamically update based on the current page and the total number of pages.
 
-First, run the development server:
+You can use Nextjs server components to control the `page` and `pageSize` parameters that get updated in the URL.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+`https://example.com?page=1&pageSize=20`
+
+## Getting Started with
+
+1. Copy the code located in [`pagination-with-links.tsx`](https://github.com/bryaneaton13/shadcn-next-link-pagination/blob/main/components/ui/pagination-with-links.tsx) and paste it into your project.
+2. Use the code
+
+## Example
+
+Simple Example
+
+```tsx
+<PaginationWithLinks page={1} pageSize={20} totalCount={500} />
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Example with Nextjs Server Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```tsx
+export default async function Example({ searchParams }) {
+  const page = parseInt(searchParams.get("page") || "1");
+  const pageSize = parseInt(searchParams.get("pageSize") || "20");
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  const [data, count] = await getDataWithCount();
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  return (
+    <div>
+      {/* Other code */}
+      <PaginationWithLinks page={page} pageSize={pageSize} totalCount={count} />
+    </div>
+  );
+}
+```
