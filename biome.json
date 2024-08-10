@@ -7,7 +7,14 @@
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 120,
-    "ignore": [".next", "node_modules/**", "**/*.json", "**/dist", "**/out", "public/**/*"]
+    "ignore": [
+      ".next",
+      "node_modules/**",
+      "**/*.json",
+      "**/dist",
+      "**/out",
+      "public/**/*"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -15,6 +22,9 @@
       "recommended": true,
       "correctness": {
         "useExhaustiveDependencies": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
       }
     }
   }

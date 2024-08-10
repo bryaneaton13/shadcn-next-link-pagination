@@ -60,15 +60,11 @@ export default async function Page() {
             </div>
 
             <Suspense>
-              <Item
-                title="With many pages"
-                totalCount={500} pageSize={5} />
+              <Item title="With many pages" totalCount={500} pageSize={5} />
             </Suspense>
 
             <Suspense>
-              <Item
-                title="With 1 item"
-                totalCount={1} />
+              <Item title="With 1 item" totalCount={1} />
             </Suspense>
 
             <Suspense>
