@@ -21,6 +21,17 @@ Simple Example
 <PaginationWithLinks page={1} pageSize={20} totalCount={500} />
 ```
 
+Example with router.push navigation (this allows you to show a loading indicator while the page is changing)
+
+```tsx
+<PaginationWithLinks
+  page={1}
+  pageSize={20}
+  totalCount={500}
+  navigationMode="router"
+/>
+```
+
 Example with Nextjs Server Components
 
 ```tsx
