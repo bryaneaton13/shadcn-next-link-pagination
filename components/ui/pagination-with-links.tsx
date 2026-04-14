@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useTransition } from "react";
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -10,13 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
@@ -69,9 +63,27 @@ export function PaginationWithLinks({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
 
   const totalPageCount = Math.ceil(totalCount / pageSize);
+  const currentUrl = searchParams?.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+  const isPending = pendingUrl !== null;
+
+  useEffect(() => {
+    setPendingUrl(null);
+  }, [currentUrl]);
+
+  const navigate = useCallback(
+    (url: string) => {
+      if (url === currentUrl) {
+        return;
+      }
+
+      setPendingUrl(url);
+      router.push(url);
+    },
+    [currentUrl, router],
+  );
 
   const buildLink = useCallback(
     (newPage: number) => {
@@ -91,19 +103,16 @@ export function PaginationWithLinks({
       const queryString = newSearchParams.toString();
       return queryString ? `${pathname}?${queryString}` : pathname;
     },
-    [pageSearchParam, searchParams, pathname]
+    [pageSearchParam, searchParams, pathname],
   );
 
   const navigateToPage = useCallback(
     (newPage: number) => {
       if (navigationMode === "router") {
-        const url = buildLink(newPage);
-        startTransition(() => {
-          router.push(url);
-        });
+        navigate(buildLink(newPage));
       }
     },
-    [navigationMode, buildLink, router]
+    [navigationMode, buildLink, navigate],
   );
 
   const navToPageSize = useCallback(
@@ -115,14 +124,12 @@ export function PaginationWithLinks({
       const url = `${pathname}?${newSearchParams.toString()}`;
 
       if (navigationMode === "router") {
-        startTransition(() => {
-          router.push(url);
-        });
+        navigate(url);
       } else {
         router.push(url);
       }
     },
-    [pageSearchParam, searchParams, pathname, navigationMode, router]
+    [pageSearchParam, searchParams, pathname, navigationMode, navigate, router],
   );
 
   const renderPageNumbers = () => {
@@ -131,15 +138,18 @@ export function PaginationWithLinks({
 
     const createPageItem = (pageNum: number) => {
       if (navigationMode === "router") {
+        const href = buildLink(pageNum);
+
         return (
           <PaginationItem key={pageNum}>
             <PaginationLink
-              onClick={() => navigateToPage(pageNum)}
+              href={href}
+              onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                event.preventDefault();
+                navigateToPage(pageNum);
+              }}
               isActive={page === pageNum}
-              className={cn(
-                "cursor-pointer",
-                isPending && "pointer-events-none opacity-50"
-              )}
+              className={cn("cursor-pointer", isPending && "pointer-events-none opacity-50")}
               aria-disabled={isPending}
             >
               {pageNum}
@@ -149,10 +159,7 @@ export function PaginationWithLinks({
       } else {
         return (
           <PaginationItem key={pageNum}>
-            <PaginationLink
-              href={buildLink(pageNum)}
-              isActive={page === pageNum}
-            >
+            <PaginationLink href={buildLink(pageNum)} isActive={page === pageNum}>
               {pageNum}
             </PaginationLink>
           </PaginationItem>
@@ -171,7 +178,7 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -186,7 +193,7 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -217,23 +224,21 @@ export function PaginationWithLinks({
           <PaginationItem>
             {navigationMode === "router" ? (
               <PaginationPrevious
-                onClick={() => navigateToPage(Math.max(page - 1, 1))}
+                href={buildLink(Math.max(page - 1, 1))}
+                onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                  event.preventDefault();
+                  navigateToPage(Math.max(page - 1, 1));
+                }}
                 aria-disabled={page === 1 || isPending}
                 tabIndex={page === 1 || isPending ? -1 : undefined}
-                className={cn(
-                  page === 1 || isPending
-                    ? "pointer-events-none opacity-50"
-                    : "cursor-pointer"
-                )}
+                className={cn(page === 1 || isPending ? "pointer-events-none opacity-50" : "cursor-pointer")}
               />
             ) : (
               <PaginationPrevious
                 href={buildLink(Math.max(page - 1, 1))}
                 aria-disabled={page === 1}
                 tabIndex={page === 1 ? -1 : undefined}
-                className={
-                  page === 1 ? "pointer-events-none opacity-50" : undefined
-                }
+                className={page === 1 ? "pointer-events-none opacity-50" : undefined}
               />
             )}
           </PaginationItem>
@@ -241,15 +246,15 @@ export function PaginationWithLinks({
           <PaginationItem>
             {navigationMode === "router" ? (
               <PaginationNext
-                onClick={() =>
-                  navigateToPage(Math.min(page + 1, totalPageCount))
-                }
+                href={buildLink(Math.min(page + 1, totalPageCount))}
+                onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                  event.preventDefault();
+                  navigateToPage(Math.min(page + 1, totalPageCount));
+                }}
                 aria-disabled={page === totalPageCount || isPending}
                 tabIndex={page === totalPageCount || isPending ? -1 : undefined}
                 className={cn(
-                  page === totalPageCount || isPending
-                    ? "pointer-events-none opacity-50"
-                    : "cursor-pointer"
+                  page === totalPageCount || isPending ? "pointer-events-none opacity-50" : "cursor-pointer",
                 )}
               />
             ) : (
@@ -257,11 +262,7 @@ export function PaginationWithLinks({
                 href={buildLink(Math.min(page + 1, totalPageCount))}
                 aria-disabled={page === totalPageCount}
                 tabIndex={page === totalPageCount ? -1 : undefined}
-                className={
-                  page === totalPageCount
-                    ? "pointer-events-none opacity-50"
-                    : undefined
-                }
+                className={page === totalPageCount ? "pointer-events-none opacity-50" : undefined}
               />
             )}
           </PaginationItem>
@@ -284,14 +285,9 @@ function SelectRowsPerPage({
     <div className="flex items-center gap-4">
       <span className="whitespace-nowrap text-sm">Rows per page</span>
 
-      <Select
-        value={String(pageSize)}
-        onValueChange={(value) => setPageSize(Number(value))}
-      >
+      <Select value={String(pageSize)} onValueChange={(value) => setPageSize(Number(value))}>
         <SelectTrigger>
-          <SelectValue placeholder="Select page size">
-            {String(pageSize)}
-          </SelectValue>
+          <SelectValue placeholder="Select page size">{String(pageSize)}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

@@ -1,13 +1,17 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
-
-  "organizeImports": {
-    "enabled": true
+  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+  "files": {
+    "includes": ["**", "!**/.next", "!**/node_modules", "!**/*.json", "!**/dist", "!**/out", "!**/public"]
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 120,
-    "ignore": [".next", "node_modules/**", "**/*.json", "**/dist", "**/out", "public/**/*"]
+    "lineWidth": 120
   },
   "linter": {
     "enabled": true,

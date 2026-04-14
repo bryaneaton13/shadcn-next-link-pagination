@@ -11,10 +11,10 @@ const defaultProps: PaginationWithLinksProps = {
 
 export default function Item({ title, ...rest }: Partial<PaginationWithLinksProps> & { title?: string }) {
   const searchParams = useSearchParams();
-  const page = rest.page || Number.parseInt(searchParams.get("page") || "1");
+  const page = rest.page || Number.parseInt(searchParams.get("page") || "1", 10);
   const pageSize =
     rest.pageSize ||
-    Number.parseInt(searchParams.get(rest.pageSizeSelectOptions?.pageSizeSearchParam || "pageSize") || "10");
+    Number.parseInt(searchParams.get(rest.pageSizeSelectOptions?.pageSizeSearchParam || "pageSize") || "10", 10);
   return (
     <div>
       {title && <h4 className="font-medium tracking-wide mb-3 text-sm">{title}</h4>}
