@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useTransition } from "react";
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -63,9 +63,27 @@ export function PaginationWithLinks({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
 
   const totalPageCount = Math.ceil(totalCount / pageSize);
+  const currentUrl = searchParams?.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+  const isPending = pendingUrl !== null;
+
+  useEffect(() => {
+    setPendingUrl(null);
+  }, [currentUrl]);
+
+  const navigate = useCallback(
+    (url: string) => {
+      if (url === currentUrl) {
+        return;
+      }
+
+      setPendingUrl(url);
+      router.push(url);
+    },
+    [currentUrl, router],
+  );
 
   const buildLink = useCallback(
     (newPage: number) => {
@@ -91,13 +109,10 @@ export function PaginationWithLinks({
   const navigateToPage = useCallback(
     (newPage: number) => {
       if (navigationMode === "router") {
-        const url = buildLink(newPage);
-        startTransition(() => {
-          router.push(url);
-        });
+        navigate(buildLink(newPage));
       }
     },
-    [navigationMode, buildLink, router],
+    [navigationMode, buildLink, navigate],
   );
 
   const navToPageSize = useCallback(
@@ -109,14 +124,12 @@ export function PaginationWithLinks({
       const url = `${pathname}?${newSearchParams.toString()}`;
 
       if (navigationMode === "router") {
-        startTransition(() => {
-          router.push(url);
-        });
+        navigate(url);
       } else {
         router.push(url);
       }
     },
-    [pageSearchParam, searchParams, pathname, navigationMode, router],
+    [pageSearchParam, searchParams, pathname, navigationMode, navigate, router],
   );
 
   const renderPageNumbers = () => {
@@ -125,10 +138,16 @@ export function PaginationWithLinks({
 
     const createPageItem = (pageNum: number) => {
       if (navigationMode === "router") {
+        const href = buildLink(pageNum);
+
         return (
           <PaginationItem key={pageNum}>
             <PaginationLink
-              onClick={() => navigateToPage(pageNum)}
+              href={href}
+              onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                event.preventDefault();
+                navigateToPage(pageNum);
+              }}
               isActive={page === pageNum}
               className={cn("cursor-pointer", isPending && "pointer-events-none opacity-50")}
               aria-disabled={isPending}
@@ -205,7 +224,11 @@ export function PaginationWithLinks({
           <PaginationItem>
             {navigationMode === "router" ? (
               <PaginationPrevious
-                onClick={() => navigateToPage(Math.max(page - 1, 1))}
+                href={buildLink(Math.max(page - 1, 1))}
+                onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                  event.preventDefault();
+                  navigateToPage(Math.max(page - 1, 1));
+                }}
                 aria-disabled={page === 1 || isPending}
                 tabIndex={page === 1 || isPending ? -1 : undefined}
                 className={cn(page === 1 || isPending ? "pointer-events-none opacity-50" : "cursor-pointer")}
@@ -223,7 +246,11 @@ export function PaginationWithLinks({
           <PaginationItem>
             {navigationMode === "router" ? (
               <PaginationNext
-                onClick={() => navigateToPage(Math.min(page + 1, totalPageCount))}
+                href={buildLink(Math.min(page + 1, totalPageCount))}
+                onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                  event.preventDefault();
+                  navigateToPage(Math.min(page + 1, totalPageCount));
+                }}
                 aria-disabled={page === totalPageCount || isPending}
                 tabIndex={page === totalPageCount || isPending ? -1 : undefined}
                 className={cn(

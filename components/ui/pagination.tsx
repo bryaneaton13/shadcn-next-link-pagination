@@ -2,7 +2,7 @@ import type * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { type Button, buttonVariants } from "@/components/ui/button";
+import { type ButtonProps, buttonVariants } from "@/components/ui/button";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -25,23 +25,43 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">;
+  size?: ButtonProps["size"];
+} & (React.ComponentProps<"a"> | React.ComponentProps<"button">);
 
 function PaginationLink({ className, isActive, size = "icon", ...props }: PaginationLinkProps) {
+  const ariaCurrent = isActive ? "page" : undefined;
+  const paginationClassName = cn(
+    buttonVariants({
+      variant: isActive ? "outline" : "ghost",
+      size,
+    }),
+    className,
+  );
+
+  if ("href" in props && typeof props.href !== "undefined") {
+    const anchorProps = props as React.ComponentProps<"a">;
+
+    return (
+      <a
+        aria-current={ariaCurrent}
+        data-slot="pagination-link"
+        data-active={isActive}
+        className={paginationClassName}
+        {...anchorProps}
+      />
+    );
+  }
+
+  const buttonProps = props as React.ComponentProps<"button">;
+
   return (
-    <a
-      aria-current={isActive ? "page" : undefined}
+    <button
+      type="button"
+      aria-current={ariaCurrent}
       data-slot="pagination-link"
       data-active={isActive}
-      className={cn(
-        buttonVariants({
-          variant: isActive ? "outline" : "ghost",
-          size,
-        }),
-        className,
-      )}
-      {...props}
+      className={paginationClassName}
+      {...buttonProps}
     />
   );
 }

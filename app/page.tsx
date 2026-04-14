@@ -3,10 +3,18 @@ import Link from "next/link";
 import Item from "./_components/item";
 import Code from "./_components/code";
 import { Suspense } from "react";
+import CurrentUrlBanner from "./_components/current-url-banner";
 
-export default async function Page() {
+type PageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function Page({ searchParams }: PageProps) {
+  await searchParams;
+
   return (
     <div className="flex min-h-screen place-items-center justify-center bg-white p-4">
+      <CurrentUrlBanner />
       <div className="mx-auto w-full md:w-4xl xl:w-6xl md:max-w-4xl xl:max-w-6xl">
         <div className="text-center mt-28 mb-20">
           <h1 className="text-2xl font-bold tracking-tight sm:text-4xl mb-4">Pagination with Nextjs Links</h1>
@@ -25,7 +33,7 @@ export default async function Page() {
             Applies search parameters for <pre className="inline">page</pre> and <pre className="inline">limit</pre> to
             the current URL.
             <br />
-            <Code code="https://example.com?page=1&limit=20" lang="html" />
+            <Code code="https://example.com?page=4&limit=20" lang="html" />
             <strong>Click around and watch the URL change!</strong>
           </h2>
 
