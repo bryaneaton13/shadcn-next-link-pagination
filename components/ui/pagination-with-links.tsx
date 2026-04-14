@@ -76,10 +76,20 @@ export function PaginationWithLinks({
   const buildLink = useCallback(
     (newPage: number) => {
       const key = pageSearchParam || "page";
-      if (!searchParams) return `${pathname}?${key}=${newPage}`;
+      if (!searchParams) {
+        return newPage === 1 ? pathname : `${pathname}?${key}=${newPage}`;
+      }
+
       const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.set(key, String(newPage));
-      return `${pathname}?${newSearchParams.toString()}`;
+
+      if (newPage === 1) {
+        newSearchParams.delete(key);
+      } else {
+        newSearchParams.set(key, String(newPage));
+      }
+
+      const queryString = newSearchParams.toString();
+      return queryString ? `${pathname}?${queryString}` : pathname;
     },
     [pageSearchParam, searchParams, pathname]
   );

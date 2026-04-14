@@ -4,7 +4,13 @@ Use shadcn pagination components to create links that will dynamically update ba
 
 You can use Nextjs server components to control the `page` and `pageSize` parameters that get updated in the URL.
 
-`https://example.com?page=1&pageSize=20`
+The first page stays canonical without a `page` query param:
+
+`https://example.com?pageSize=20`
+
+Subsequent pages include `page` as expected:
+
+`https://example.com?page=2&pageSize=20`
 
 ![See it](PaginationExample.gif)
 
