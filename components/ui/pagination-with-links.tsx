@@ -60,6 +60,7 @@ export function PaginationWithLinks({
   pageSearchParam,
   navigationMode = "link",
 }: PaginationWithLinksProps) {
+  if (totalCount <= pageSize) return null
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
